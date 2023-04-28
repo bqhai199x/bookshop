@@ -4,7 +4,7 @@
     {
         public string Code
         {
-            get { return OrderId.ToString("DH000"); }
+            get { return Id.ToString("DH000"); }
         }
 
         public int? TotalQuantity

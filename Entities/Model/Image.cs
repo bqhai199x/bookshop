@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entities
+﻿namespace Entities
 {
-    [Table("Image")]
     public partial class Image
     {
-        public int ImageId { get; set; } = 0;
+        public int Id { get; set; } = 0;
 
         public string ImageURL { get; set; } = string.Empty;
 

@@ -1,14 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entities
+﻿namespace Entities
 {
-    [Table("Order")]
     public partial class Order
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int OrderId { get; set; } = 0;
+        public int Id { get; set; } = 0;
 
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
@@ -30,13 +24,10 @@ namespace Entities
 
         public int? AccountId { get; set; } = null;
 
-        [ForeignKey("AccountId")]
         public Account? Account { get; set; } = null;
 
-        [ForeignKey("CouponId")]
         public Coupon? Coupon { get; set; } = null;
 
-        [ForeignKey("ShipperId")]
         public Shipper? Shipper { get; set; } = null;
 
         public List<OrderDetail> OrderDetails { get; set; } = new();

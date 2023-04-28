@@ -1,14 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entities
+﻿namespace Entities
 {
-    [Table("Coupon")]
     public partial class Coupon
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CouponId { get; set; } = 0;
+        public int Id { get; set; } = 0;
 
         public string Code { get; set; } = string.Empty;
 

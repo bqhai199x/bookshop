@@ -1,14 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entities
+﻿namespace Entities
 {
-    [Table("Account")]
     public partial class Account
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AccountId { get; set; } = 0;
+        public int Id { get; set; } = 0;
 
         public string UserName { get; set; } = string.Empty;
 

@@ -1,14 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entities
+﻿namespace Entities
 {
-    [Table("Product")]
     public partial class Product
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProductId { get; set; } = 0;
+        public int Id { get; set; } = 0;
 
         public string Name { get; set; } = string.Empty;
 
@@ -28,10 +22,8 @@ namespace Entities
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        [ForeignKey("CategoryId")]
         public Category? Category { get; set; } = null;
 
-        [ForeignKey("PublisherId")]
         public Publisher? Publisher { get; set; } = null;
 
         public List<Image> Images { get; set; } = new();
