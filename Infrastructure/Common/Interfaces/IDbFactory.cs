@@ -5,8 +5,8 @@ namespace Infrastructure.Common.Interfaces
 {
     public interface IDbFactory
     {
-        IDbConnection Conn { get; }
+        IDbConnection Connection { get; }
 
-        IDbTransaction? Trans { get; set; }
+        IDbTransaction? Transaction { get; set; }
     }
 }

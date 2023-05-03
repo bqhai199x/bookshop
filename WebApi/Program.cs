@@ -17,7 +17,6 @@ namespace WebApi
 
             builder.Services.AddInfrastructure();
             builder.Services.AddInjectServices();
-            builder.Services.AddInjectReposistories();
 
             var app = builder.Build();
 

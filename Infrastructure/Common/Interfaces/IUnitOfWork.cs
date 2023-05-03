@@ -1,11 +1,13 @@
-﻿namespace Infrastructure.Common.Interfaces
+﻿using Infrastructure.Repositories.Interfaces;
+
+namespace Infrastructure.Common.Interfaces
 {
-    public interface IUnitOfWork : IUnitRepository
+    public interface IUnitOfWork : IUnitDb
     {
-        void BeginTransaction();
+        ICategoryRepository Category { get; }
 
-        void Commit();
+        IProductRepository Product { get; }
 
-        void Rollback();
+        IImageRepository Image { get; }
     }
 }

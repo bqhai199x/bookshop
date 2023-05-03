@@ -15,28 +15,42 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public Task<int> AddAsync(Product entity)
+        public async Task<int> Add(Product product)
         {
-            throw new NotImplementedException();
+            int id = await DbQuery.Query("Product")
+                .InsertGetIdAsync<int>(new
+                {
+                    Name = product.Name,
+                    PublisherId = product.PublisherId,
+                    Author = product.Author,
+                    CategoryId = product.CategoryId,
+                    Size = product.Size,
+                    NumPage = product.NumPage,
+                    Price = product.Price,
+                    Description = product.Description,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now
+                }, DbTrans);
+            return id;
         }
 
-        public Task<int> DeleteAsync(int id)
+        public async Task<int> Delete(int id)
         {
-            throw new NotImplementedException();
+            int result = await DbQuery.Query("Product").Where("Id", id).DeleteAsync();
+            return result;
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<List<Product>> GetAll()
         {
-            var productList = await DbFactory.Query("Product").GetAsync<Product>();
+            var productList = await DbQuery.Query("Product").GetAsync<Product>();
             return productList.ToList();
         }
 
-        public async Task<Product?> GetByIdAsync(int id)
+        public async Task<Product?> GetById(int id)
         {
             var query = new Query("Product")
                                 .LeftJoin("Category", "Product.CategoryId", "Category.Id")
-                                .Where("Product.Id", id)
-                                .Limit(1);
+                                .Where("Product.Id", id);
 
             MySqlCompiler compiler = new MySqlCompiler();
             SqlResult sqlResult = compiler.Compile(query);
@@ -50,9 +64,23 @@ namespace Infrastructure.Repositories
             return result.FirstOrDefault();
         }
 
-        public Task<int> UpdateAsync(Product entity)
+        public async Task<int> Update(Product product)
         {
-            throw new NotImplementedException();
+            var result = await DbQuery.Query("Product")
+                .Where("Id", product.Id)
+                .UpdateAsync(new
+                {
+                    Name = product.Name,
+                    PublisherId = product.PublisherId,
+                    Author = product.Author,
+                    CategoryId = product.Category,
+                    Size = product.Size,
+                    NumPage = product.NumPage,
+                    Price = product.Price,
+                    Description = product.Description,
+                    UpdatedDate = DateTime.Now
+                }, DbTrans);
+            return result;
         }
     }
 }

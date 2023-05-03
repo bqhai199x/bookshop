@@ -1,7 +1,5 @@
-﻿using Infrastructure.Common.Interfaces;
-using Infrastructure.Common;
-using Infrastructure.Repositories;
-using Infrastructure.Repositories.Interfaces;
+﻿using Infrastructure.Common;
+using Infrastructure.Common.Interfaces;
 using WebApi.Services;
 using WebApi.Services.Interfaces;
 
@@ -19,13 +17,6 @@ namespace WebApi.Base
         {
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
-        }
-
-        public static void AddInjectReposistories(this IServiceCollection services)
-        {
-            services.AddTransient<IProductRepository, ProductRepository>();
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddTransient<IOrderRepository, OrderRepository>();
         }
     }
 }

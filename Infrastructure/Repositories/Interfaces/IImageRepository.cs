@@ -1,9 +1,13 @@
 ﻿using Entities;
-using Infrastructure.Common.Interfaces;
 
 namespace Infrastructure.Repositories.Interfaces
 {
-    internal interface IImageRepository : IBaseRepository<Image>
+    public interface IImageRepository
     {
+        Task<int> Add(ImageType imageType, int typeId, params string[] urls);
+
+        Task<int> DeleteById(params int[] ids);
+
+        Task<int> DeleteTypeId(ImageType type, int typeId);
     }
 }

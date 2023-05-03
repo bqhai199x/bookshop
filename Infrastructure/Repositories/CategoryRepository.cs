@@ -15,50 +15,58 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public Task<int> AddAsync(Category entity)
+        public async Task<int> Add(Category category)
         {
-            throw new NotImplementedException();
+            int id = await DbQuery.Query("Category")
+                .InsertGetIdAsync<int>(new
+                {
+                    Name = category.Name,
+                    Description = category.Description
+                }, DbTrans);
+            return id;
         }
 
-        public Task<int> DeleteAsync(int id)
+        public async Task<int> Delete(int id)
         {
-            throw new NotImplementedException();
+            int result = await DbQuery.Query("Category").Where("Id", id).DeleteAsync();
+            return result;
         }
 
-        public async Task<List<Category>> GetAllAsync()
+        public async Task<List<Category>> GetAll()
         {
-            var categoryList = await DbFactory.Query("Category").GetAsync<Category>();
+            var categoryList = await DbQuery.Query("Category").GetAsync<Category>();
             return categoryList.ToList();
         }
 
-        public async Task<Category?> GetByIdAsync(int id)
+        public async Task<Category?> GetById(int id)
         {
             var query = new Query("Category")
-                                .LeftJoin("Product", "Product.CategoryId", "Category.Id")
-                                .Where("Category.Id", id);
+                            .LeftJoin("Product", "Product.CategoryId", "Category.Id")
+                            .Where("Category.Id", id);
 
             MySqlCompiler compiler = new MySqlCompiler();
             SqlResult sqlResult = compiler.Compile(query);
 
-            var result = await DbConn.QueryAsync<Category, Product, Category>(sqlResult.Sql, (cate, pro) =>
-            {
-                cate.Products.Add(pro);
-                return cate;
-            }, splitOn: "Id", param: sqlResult.NamedBindings);
-
             Category? category = null;
-            foreach (var item in result.GroupBy(x => x.Id))
+            await DbConn.QueryAsync<Category, Product, Category>(sqlResult.Sql, (cate, pro) =>
             {
-                category = item.First();
-                category.Products = item.SelectMany(x => x.Products).ToList();
-                break;
-            }
+                category ??= cate;
+                if (pro != null) category.Products.Add(pro);
+                return category;
+            }, splitOn: "Id", param: sqlResult.NamedBindings);
             return category;
         }
 
-        public Task<int> UpdateAsync(Category entity)
+        public async Task<int> Update(Category entity)
         {
-            throw new NotImplementedException();
+            int result = await DbQuery.Query("Category")
+                .Where("Id", entity.Id)
+                .UpdateAsync(new
+                {
+                    Name = entity.Name,
+                    Description = entity.Description
+                });
+            return result;
         }
     }
 }

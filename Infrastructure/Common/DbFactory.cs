@@ -7,16 +7,16 @@ namespace Infrastructure.Common
 {
     public class DbFactory : IDbFactory, IDisposable
     {
-        public IDbConnection Conn { get; }
+        public IDbConnection Connection { get; }
 
-        public IDbTransaction? Trans { get; set; }
+        public IDbTransaction? Transaction { get; set; }
 
         public DbFactory(IConfiguration config)
         {
-            Conn = new MySqlConnection(config.GetConnectionString("DefaultConnection"));
-            Conn.Open();
+            Connection = new MySqlConnection(config.GetConnectionString("DefaultConnection"));
+            Connection.Open();
         }
 
-        public void Dispose() => Conn?.Dispose();
+        public void Dispose() => Connection?.Dispose();
     }
 }

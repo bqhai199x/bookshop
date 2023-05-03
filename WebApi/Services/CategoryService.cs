@@ -10,16 +10,34 @@ namespace WebApi.Services
         {
         }
 
-        public async Task<List<Category>> GetAllCategory()
+        public async Task<int> Add(Category category)
         {
-            List<Category> categoryList = await _unitOfWork.Category.GetAllAsync();
+            int id = await _unitOfWork.Category.Add(category);
+            return id;
+        }
+
+        public async Task<int> Delete(int id)
+        {
+            int result = await _unitOfWork.Category.Delete(id);
+            return result;
+        }
+
+        public async Task<List<Category>> GetAll()
+        {
+            List<Category> categoryList = await _unitOfWork.Category.GetAll();
             return categoryList;
         }
 
-        public async Task<Category?> GetCategoryById(int id)
+        public async Task<Category?> GetById(int id)
         {
-            Category? category = await _unitOfWork.Category.GetByIdAsync(id);
+            Category? category = await _unitOfWork.Category.GetById(id);
             return category;
+        }
+
+        public async Task<int> Update(Category category)
+        {
+            int result = await _unitOfWork.Category.Update(category);
+            return result;
         }
     }
 }

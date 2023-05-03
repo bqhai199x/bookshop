@@ -2,6 +2,7 @@
 using Infrastructure.Common;
 using Infrastructure.Common.Interfaces;
 using Infrastructure.Repositories.Interfaces;
+using SqlKata.Execution;
 
 namespace Infrastructure.Repositories
 {
@@ -11,29 +12,32 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public Task<int> AddAsync(Image entity)
+        public async Task<int> Add(ImageType imageType, int typeId, params string[] urls)
         {
-            throw new NotImplementedException();
+            var cols = new[] { "Type", "TypeId", "ImageURL" };
+            var data = urls.Select(x => new object[]
+            {
+                (int) imageType, typeId, x
+            });
+            int result = await DbQuery.Query("Image").InsertAsync(cols, data);
+            return result;
         }
 
-        public Task<int> DeleteAsync(int id)
+        public async Task<int> DeleteById(params int[] ids)
         {
-            throw new NotImplementedException();
+            int result = await DbQuery.Query("Image")
+                .WhereIn("Id", ids)
+                .DeleteAsync(DbTrans);
+            return result;
         }
 
-        public Task<List<Image>> GetAllAsync()
+        public async Task<int> DeleteTypeId(ImageType type, int typeId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Image?> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> UpdateAsync(Image entity)
-        {
-            throw new NotImplementedException();
+            int result = await DbQuery.Query("Image")
+                .Where("Type", (int) type)
+                .Where("TypeId", typeId)
+                .DeleteAsync(DbTrans);
+            return result;
         }
     }
 }

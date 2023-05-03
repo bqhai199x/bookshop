@@ -4,8 +4,14 @@ namespace WebApi.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<List<Category>> GetAllCategory();
+        Task<List<Category>> GetAll();
 
-        Task<Category?> GetCategoryById(int id);
+        Task<Category?> GetById(int id);
+
+        Task<int> Add(Category category);
+
+        Task<int> Delete(int id);
+
+        Task<int> Update(Category category);
     }
 }

@@ -4,9 +4,7 @@ using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class CategoryController : ControllerBase
+    public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
 
@@ -15,18 +13,39 @@ namespace WebApi.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet("getbyid")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            Category? category = await _categoryService.GetCategoryById(id);
+            Category? category = await _categoryService.GetById(id);
             return Ok(category);
         }
 
-        [HttpGet("list")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<Category> categoryList = await _categoryService.GetAllCategory();
+            List<Category> categoryList = await _categoryService.GetAll();
             return Ok(categoryList);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(Category category)
+        {
+            int categoryId = await _categoryService.Add(category);
+            return Ok(categoryId);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            int result = await _categoryService.Delete(id);
+            return Ok(result > 0);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(Category category)
+        {
+            int result = await _categoryService.Update(category);
+            return Ok(result > 0);
         }
     }
 }

@@ -1,34 +1,22 @@
 ﻿using Infrastructure.Common.Interfaces;
+using Infrastructure.Repositories;
 using Infrastructure.Repositories.Interfaces;
 
 namespace Infrastructure.Common
 {
-    public class UnitOfWork : UnitRepository, IUnitOfWork
+    public class UnitOfWork : UnitDb, IUnitOfWork
     {
-        public IDbFactory DbFactory { get; }
-
-        public UnitOfWork(IDbFactory dbFactory, ICategoryRepository category, IProductRepository product, IOrderRepository order) : base(category, product, order)
+        public UnitOfWork(IDbFactory dbFactory) : base(dbFactory)
         {
-            DbFactory = dbFactory;
         }
 
-        public void BeginTransaction()
-        {
-            DbFactory.Trans = DbFactory.Conn.BeginTransaction();
-        }
+        private ICategoryRepository? _category;
+        public ICategoryRepository Category => _category ??= new CategoryRepository(DbFactory);
 
-        public void Commit()
-        {
-            DbFactory.Trans?.Commit();
-            Dispose();
-        }
+        private IProductRepository? _product;
+        public IProductRepository Product => _product ??= new ProductRepository(DbFactory);
 
-        public void Rollback()
-        {
-            DbFactory.Trans?.Rollback();
-            Dispose();
-        }
-
-        public void Dispose() => DbFactory.Trans?.Dispose();
+        private IImageRepository? _image;
+        public IImageRepository Image => _image ??= new ImageRepository(DbFactory);
     }
 }

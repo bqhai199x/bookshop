@@ -9,23 +9,16 @@ namespace Infrastructure.Common
     {
         protected readonly IDbFactory _dbFactory;
 
-        protected IDbConnection DbConn => _dbFactory.Conn;
-
-        protected IDbTransaction? DbTrans => _dbFactory.Trans;
-
-        private QueryFactory? _queryFactory;
-
-        protected QueryFactory DbFactory => _queryFactory ?? GetQueryFactory();
-
         public BaseRepository(IDbFactory dbFactory)
         {
             _dbFactory = dbFactory;
         }
 
-        protected QueryFactory GetQueryFactory()
-        {
-            _queryFactory = new QueryFactory(DbConn, new MySqlCompiler());
-            return _queryFactory;
-        }
+        protected IDbConnection DbConn => _dbFactory.Connection;
+
+        protected IDbTransaction? DbTrans => _dbFactory.Transaction;
+
+        private QueryFactory? _queryFactory;
+        protected QueryFactory DbQuery => _queryFactory ??= new QueryFactory(DbConn, new MySqlCompiler());
     }
 }
