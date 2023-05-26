@@ -1,6 +1,9 @@
 ﻿using Entities;
 using Infrastructure.Common.Interfaces;
+using Utilities;
+using WebApi.Base;
 using WebApi.Services.Interfaces;
+using static Dapper.SqlMapper;
 
 namespace WebApi.Services
 {
@@ -22,10 +25,18 @@ namespace WebApi.Services
             return result;
         }
 
-        public async Task<List<Category>> GetAll()
+        public async Task<PaginatedList<Category>> GetAll(int pageIndex, int pageSize)
         {
-            List<Category> categoryList = await _unitOfWork.Category.GetAll();
-            return categoryList;
+            int total = await _unitOfWork.Category.Count();
+            int totalPages = (int)Math.Ceiling(total / (double)pageSize);
+            if (pageIndex > totalPages || pageIndex < 1) pageIndex = 1;
+            List<Category> categoryList = await _unitOfWork.Category.GetAll(pageIndex, pageSize);
+            if(categoryList.Count == 0)
+            {
+                throw new NoDataException();
+            }
+            var result = new PaginatedList<Category>(categoryList, total, pageIndex, pageSize);
+            return result;
         }
 
         public async Task<Category?> GetById(int id)

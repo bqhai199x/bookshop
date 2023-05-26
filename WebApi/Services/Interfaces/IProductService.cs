@@ -1,10 +1,11 @@
 ﻿using Entities;
+using Utilities;
 
 namespace WebApi.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<List<Product>> GetAll();
+        Task<PaginatedList<Product>> GetAll(int pageIndex, int pageSize);
 
         Task<Product?> GetById(int id);
 

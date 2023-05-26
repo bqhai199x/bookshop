@@ -1,5 +1,7 @@
 ﻿using Entities;
 using Infrastructure.Common.Interfaces;
+using Utilities;
+using WebApi.Base;
 using WebApi.Services.Interfaces;
 
 namespace WebApi.Services
@@ -22,10 +24,18 @@ namespace WebApi.Services
             return result;
         }
 
-        public async Task<List<Product>> GetAll()
+        public async Task<PaginatedList<Product>> GetAll(int pageIndex, int pageSize)
         {
-            List<Product> productList = await _unitOfWork.Product.GetAll();
-            return productList;
+            int total = await _unitOfWork.Product.Count();
+            int totalPages = (int)Math.Ceiling(total / (double)pageSize);
+            if (pageIndex > totalPages || pageIndex < 1) pageIndex = 1;
+            List<Product> productList = await _unitOfWork.Product.GetAll(pageIndex, pageSize);
+            if (productList.Count == 0)
+            {
+                throw new NoDataException();
+            }
+            var result = new PaginatedList<Product>(productList, total, pageIndex, pageSize);
+            return result;
         }
 
         public async Task<Product?> GetById(int id)

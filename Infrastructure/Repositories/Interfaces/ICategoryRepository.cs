@@ -4,7 +4,7 @@ namespace Infrastructure.Repositories.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task<List<Category>> GetAll();
+        Task<List<Category>> GetAll(int pageIndex, int pageSize);
 
         Task<Category?> GetById(int id);
 
@@ -13,5 +13,7 @@ namespace Infrastructure.Repositories.Interfaces
         Task<int> Update(Category category);
 
         Task<int> Delete(int id);
+
+        Task<int> Count();
     }
 }

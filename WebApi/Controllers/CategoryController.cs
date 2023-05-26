@@ -1,5 +1,6 @@
 using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Utilities;
 using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers
@@ -21,9 +22,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int pageIndex, int pageSize)
         {
-            List<Category> categoryList = await _categoryService.GetAll();
+            PaginatedList <Category> categoryList = await _categoryService.GetAll(pageIndex, pageSize);
             return Ok(categoryList);
         }
 

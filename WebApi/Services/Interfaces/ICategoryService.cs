@@ -1,10 +1,11 @@
 ﻿using Entities;
+using Utilities;
 
 namespace WebApi.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<List<Category>> GetAll();
+        Task<PaginatedList<Category>> GetAll(int pageIndex, int pageSize);
 
         Task<Category?> GetById(int id);
 

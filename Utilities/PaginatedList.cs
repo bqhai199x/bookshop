@@ -1,28 +1,28 @@
 ﻿namespace Utilities
 {
-    public class PaginatedList<TEntity> : List<TEntity>
+    public class PaginatedList<TEntity>
     {
         public PaginatedList(List<TEntity> items, int count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
+            PageSize = pageSize;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-            AddRange(items);
-            Counts = count;
+            Items = items;
+            Count = count;
         }
 
+        public List<TEntity> Items { get; } = new List<TEntity>();
+
         public int PageIndex { get; }
+
         public int TotalPages { get; }
-        public int Counts { get; }
+
+        public int Count { get; }
+
+        public int PageSize { get; }
 
         public bool HasPreviousPage => PageIndex > 1;
 
         public bool HasNextPage => PageIndex < TotalPages;
-
-        public static PaginatedList<TEntity> Create(IQueryable<TEntity> source, int pageIndex, int pageSize)
-        {
-            var count = source.Count();
-            var entities = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-            return new PaginatedList<TEntity>(entities, count, pageIndex, pageSize);
-        }
     }
 }

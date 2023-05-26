@@ -26,15 +26,21 @@ namespace Infrastructure.Repositories
             return id;
         }
 
+        public async Task<int> Count()
+        {
+            int result = await DbQuery.Query("Category").CountAsync<int>();
+            return result;
+        }
+
         public async Task<int> Delete(int id)
         {
             int result = await DbQuery.Query("Category").Where("Id", id).DeleteAsync();
             return result;
         }
 
-        public async Task<List<Category>> GetAll()
+        public async Task<List<Category>> GetAll(int pageIndex, int pageSize)
         {
-            var categoryList = await DbQuery.Query("Category").GetAsync<Category>();
+            var categoryList = await DbQuery.Query("Category").Skip((pageIndex - 1) * pageSize).Take(pageSize).GetAsync<Category>();
             return categoryList.ToList();
         }
 

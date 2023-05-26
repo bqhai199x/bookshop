@@ -40,9 +40,15 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-        public async Task<List<Product>> GetAll()
+        public async Task<int> Count()
         {
-            var productList = await DbQuery.Query("Product").GetAsync<Product>();
+            int result = await DbQuery.Query("Product").CountAsync<int>();
+            return result;
+        }
+
+        public async Task<List<Product>> GetAll(int pageIndex, int pageSize)
+        {
+            var productList = await DbQuery.Query("Product").Skip((pageIndex - 1) * pageSize).Take(pageSize).GetAsync<Product>();
             return productList.ToList();
         }
 
