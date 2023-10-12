@@ -1,52 +1,47 @@
-﻿using Entities;
+﻿using AutoMapper;
+using Entities;
+using Entities.ViewModel;
 using Infrastructure.Common.Interfaces;
-using Utilities;
-using WebApi.Base;
+using SqlKata;
 using WebApi.Services.Interfaces;
-using static Dapper.SqlMapper;
 
 namespace WebApi.Services
 {
     public class CategoryService : BaseService, ICategoryService
     {
-        public CategoryService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
-        public async Task<int> Add(Category category)
+        public async Task<int> Add(CategoryRq.InsertDto categoryRq)
         {
+            var category = _mapper.Map<Category>(categoryRq);
             int id = await _unitOfWork.Category.Add(category);
             return id;
         }
 
         public async Task<int> Delete(int id)
         {
-            int result = await _unitOfWork.Category.Delete(id);
+            int result = await _unitOfWork.Category.DeleteById(id);
             return result;
         }
 
-        public async Task<PaginatedList<Category>> GetAll(int pageIndex, int pageSize)
+        public async Task<List<Category>> GetAll(int pageIndex, int pageSize)
         {
-            int total = await _unitOfWork.Category.Count();
-            int totalPages = (int)Math.Ceiling(total / (double)pageSize);
-            if (pageIndex > totalPages || pageIndex < 1) pageIndex = 1;
-            List<Category> categoryList = await _unitOfWork.Category.GetAll(pageIndex, pageSize);
-            if(categoryList.Count == 0)
-            {
-                throw new NoDataException();
-            }
-            var result = new PaginatedList<Category>(categoryList, total, pageIndex, pageSize);
-            return result;
+            Query query = _unitOfWork.Category.GetTableQuery().Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            List<Category> categoryList = await _unitOfWork.Category.Filter(query);
+            return categoryList;
         }
 
         public async Task<Category?> GetById(int id)
         {
-            Category? category = await _unitOfWork.Category.GetById(id);
+            Category? category = await _unitOfWork.Category.FindById(id);
             return category;
         }
 
-        public async Task<int> Update(Category category)
+        public async Task<int> Update(CategoryRq.UpdateDto categoryRq)
         {
+            var category = _mapper.Map<Category>(categoryRq);
             int result = await _unitOfWork.Category.Update(category);
             return result;
         }

@@ -11,7 +11,5 @@
         public string Phone { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
-
-        public List<Order> Orders { get; set; } = new();
     }
 }

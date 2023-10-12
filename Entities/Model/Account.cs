@@ -1,5 +1,8 @@
-﻿namespace Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Entities
 {
+    [Table("account")]
     public partial class Account
     {
         public int Id { get; set; } = 0;
@@ -31,9 +34,5 @@
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         public DateTime UpdatedDate { get; set; } = DateTime.Now;
-
-        public List<Review> Reviews { get; set; } = new();
-
-        public List<Order> Orders { get; set; } = new();
     }
 }

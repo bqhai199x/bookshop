@@ -4,11 +4,21 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>185d83ae-e8b9-4a3a-a38d-3d336bc9a9c3</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 

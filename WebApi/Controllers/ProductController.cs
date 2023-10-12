@@ -1,6 +1,6 @@
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Utilities;
 using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers
@@ -14,10 +14,19 @@ namespace WebApi.Controllers
             _productService = productService;
         }
 
+        [AllowAnonymous]
+        [HttpGet("count")]
+        public async Task<IActionResult> Count()
+        {
+            int count = await _productService.Count();
+            return Ok(count);
+        }
+
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(int pageIndex, int pageSize)
         {
-            PaginatedList<Product> products = await _productService.GetAll(pageIndex, pageSize);
+            List<Product> products = await _productService.GetAll(pageIndex, pageSize);
             return Ok(products);
         }
 

@@ -1,15 +1,12 @@
-﻿using Dapper;
-using Entities;
+﻿using Entities;
 using Infrastructure.Common;
 using Infrastructure.Common.Interfaces;
 using Infrastructure.Repositories.Interfaces;
-using SqlKata;
-using SqlKata.Compilers;
 using SqlKata.Execution;
 
 namespace Infrastructure.Repositories
 {
-    public class ProductRepository : BaseRepository, IProductRepository
+    public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
         public ProductRepository(IDbFactory dbFactory) : base(dbFactory)
         {
@@ -17,7 +14,7 @@ namespace Infrastructure.Repositories
 
         public async Task<int> Add(Product product)
         {
-            int id = await DbQuery.Query("Product")
+            int id = await TableQuery
                 .InsertGetIdAsync<int>(new
                 {
                     Name = product.Name,
@@ -34,52 +31,34 @@ namespace Infrastructure.Repositories
             return id;
         }
 
-        public async Task<int> Delete(int id)
-        {
-            int result = await DbQuery.Query("Product").Where("Id", id).DeleteAsync();
-            return result;
-        }
+        //public override async Task<Product?> GetById(int id)
+        //{
+        //    var query = new Query("Product")
+        //                        .LeftJoin("Category", "Product.CategoryId", "Category.Id")
+        //                        .Where("Product.Id", id);
 
-        public async Task<int> Count()
-        {
-            int result = await DbQuery.Query("Product").CountAsync<int>();
-            return result;
-        }
+        //    MySqlCompiler compiler = new MySqlCompiler();
+        //    SqlResult sqlResult = compiler.Compile(query);
 
-        public async Task<List<Product>> GetAll(int pageIndex, int pageSize)
-        {
-            var productList = await DbQuery.Query("Product").Skip((pageIndex - 1) * pageSize).Take(pageSize).GetAsync<Product>();
-            return productList.ToList();
-        }
+        //    var result = await DbConn.QueryAsync<Product, Category, Product>(sqlResult.Sql, (pro, cate) =>
+        //    {
+        //        pro.Category = cate;
+        //        return pro;
+        //    }, splitOn: "Id", param: sqlResult.NamedBindings);
 
-        public async Task<Product?> GetById(int id)
-        {
-            var query = new Query("Product")
-                                .LeftJoin("Category", "Product.CategoryId", "Category.Id")
-                                .Where("Product.Id", id);
-
-            MySqlCompiler compiler = new MySqlCompiler();
-            SqlResult sqlResult = compiler.Compile(query);
-
-            var result = await DbConn.QueryAsync<Product, Category, Product>(sqlResult.Sql, (pro, cate) =>
-            {
-                pro.Category = cate;
-                return pro;
-            }, splitOn: "Id", param: sqlResult.NamedBindings);
-
-            return result.FirstOrDefault();
-        }
+        //    return result.FirstOrDefault();
+        //}
 
         public async Task<int> Update(Product product)
         {
-            var result = await DbQuery.Query("Product")
+            var result = await TableQuery
                 .Where("Id", product.Id)
                 .UpdateAsync(new
                 {
                     Name = product.Name,
                     PublisherId = product.PublisherId,
                     Author = product.Author,
-                    CategoryId = product.Category,
+                    CategoryId = product.CategoryId,
                     Size = product.Size,
                     NumPage = product.NumPage,
                     Price = product.Price,

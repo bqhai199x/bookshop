@@ -1,5 +1,8 @@
-﻿namespace Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Entities
 {
+    [Table("product")]
     public partial class Product
     {
         public int Id { get; set; } = 0;
@@ -21,15 +24,5 @@
         public string Description { get; set; } = string.Empty;
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-
-        public Category? Category { get; set; } = null;
-
-        public Publisher? Publisher { get; set; } = null;
-
-        public List<Image> Images { get; set; } = new();
-
-        public List<Review> Reviews { get; set; } = new();
-
-        public List<OrderDetail> OrderDetails { get; set; } = new();
     }
 }

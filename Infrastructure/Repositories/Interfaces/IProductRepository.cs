@@ -1,19 +1,12 @@
 ﻿using Entities;
+using Infrastructure.Common.Interfaces;
 
 namespace Infrastructure.Repositories.Interfaces
 {
-    public interface IProductRepository
+    public interface IProductRepository : IGenericRepository<Product>
     {
-        Task<List<Product>> GetAll(int pageIndex, int pageSize);
-
-        Task<Product?> GetById(int id);
-
         Task<int> Add(Product product);
 
         Task<int> Update(Product product);
-
-        Task<int> Delete(int id);
-
-        Task<int> Count();
     }
 }

@@ -13,9 +13,5 @@
         public string Content { get; set; } = string.Empty;
 
         public DateTime CreatedTime { get; set; } = DateTime.Now;
-
-        public Account? Account { get; set; } = null;
-
-        public Product? Product { get; set; } = null;
     }
 }

@@ -23,13 +23,5 @@
         public int? CouponId { get; set; } = null;
 
         public int? AccountId { get; set; } = null;
-
-        public Account? Account { get; set; } = null;
-
-        public Coupon? Coupon { get; set; } = null;
-
-        public Shipper? Shipper { get; set; } = null;
-
-        public List<OrderDetail> OrderDetails { get; set; } = new();
     }
 }

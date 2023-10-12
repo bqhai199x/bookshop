@@ -1,6 +1,7 @@
 using Entities;
+using Entities.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Utilities;
 using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers
@@ -21,15 +22,16 @@ namespace WebApi.Controllers
             return Ok(category);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(int pageIndex, int pageSize)
         {
-            PaginatedList <Category> categoryList = await _categoryService.GetAll(pageIndex, pageSize);
+            List<Category> categoryList = await _categoryService.GetAll(pageIndex, pageSize);
             return Ok(categoryList);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Category category)
+        public async Task<IActionResult> Add(CategoryRq.InsertDto category)
         {
             int categoryId = await _categoryService.Add(category);
             return Ok(categoryId);
@@ -43,7 +45,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Category category)
+        public async Task<IActionResult> Update(CategoryRq.UpdateDto category)
         {
             int result = await _categoryService.Update(category);
             return Ok(result > 0);

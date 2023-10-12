@@ -6,7 +6,7 @@ using SqlKata.Execution;
 
 namespace Infrastructure.Repositories
 {
-    internal class ImageRepository : BaseRepository, IImageRepository
+    internal class ImageRepository : GenericRepository<Image>, IImageRepository
     {
         public ImageRepository(IDbFactory dbFactory) : base(dbFactory)
         {
@@ -19,21 +19,13 @@ namespace Infrastructure.Repositories
             {
                 (int) imageType, typeId, x
             });
-            int result = await DbQuery.Query("Image").InsertAsync(cols, data);
-            return result;
-        }
-
-        public async Task<int> DeleteById(params int[] ids)
-        {
-            int result = await DbQuery.Query("Image")
-                .WhereIn("Id", ids)
-                .DeleteAsync(DbTrans);
+            int result = await TableQuery.InsertAsync(cols, data);
             return result;
         }
 
         public async Task<int> DeleteTypeId(ImageType type, int typeId)
         {
-            int result = await DbQuery.Query("Image")
+            int result = await TableQuery
                 .Where("Type", (int) type)
                 .Where("TypeId", typeId)
                 .DeleteAsync(DbTrans);

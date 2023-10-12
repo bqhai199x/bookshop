@@ -1,5 +1,8 @@
-﻿namespace Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Entities
 {
+    [Table("image")]
     public partial class Image
     {
         public int Id { get; set; } = 0;

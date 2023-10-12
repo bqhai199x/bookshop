@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Common
 {
-    public class UnitDb : IUnitDb
+    public class UnitDb : Disposable, IUnitDb
     {
         public IDbFactory DbFactory { get; }
 
@@ -28,6 +28,6 @@ namespace Infrastructure.Common
             Dispose();
         }
 
-        public void Dispose() => DbFactory.Transaction?.Dispose();
+        protected override void DisposeCore() => DbFactory.Transaction?.Dispose();
     }
 }

@@ -1,19 +1,12 @@
 ﻿using Entities;
+using Infrastructure.Common.Interfaces;
 
 namespace Infrastructure.Repositories.Interfaces
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
-        Task<List<Category>> GetAll(int pageIndex, int pageSize);
-
-        Task<Category?> GetById(int id);
-
         Task<int> Add(Category category);
 
         Task<int> Update(Category category);
-
-        Task<int> Delete(int id);
-
-        Task<int> Count();
     }
 }

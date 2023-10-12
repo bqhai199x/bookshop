@@ -1,14 +1,14 @@
-﻿using Entities;
+﻿using AutoMapper;
+using Entities;
 using Infrastructure.Common.Interfaces;
-using Utilities;
-using WebApi.Base;
+using SqlKata;
 using WebApi.Services.Interfaces;
 
 namespace WebApi.Services
 {
     public class ProductService : BaseService, IProductService
     {
-        public ProductService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
@@ -18,29 +18,28 @@ namespace WebApi.Services
             return id;
         }
 
+        public async Task<int> Count()
+        {
+            int count = await _unitOfWork.Product.Count();
+            return count;
+        }
+
         public async Task<int> Delete(int id)
         {
-            int result = await _unitOfWork.Product.Delete(id);
+            int result = await _unitOfWork.Product.DeleteById(id);
             return result;
         }
 
-        public async Task<PaginatedList<Product>> GetAll(int pageIndex, int pageSize)
+        public async Task<List<Product>> GetAll(int pageIndex, int pageSize)
         {
-            int total = await _unitOfWork.Product.Count();
-            int totalPages = (int)Math.Ceiling(total / (double)pageSize);
-            if (pageIndex > totalPages || pageIndex < 1) pageIndex = 1;
-            List<Product> productList = await _unitOfWork.Product.GetAll(pageIndex, pageSize);
-            if (productList.Count == 0)
-            {
-                throw new NoDataException();
-            }
-            var result = new PaginatedList<Product>(productList, total, pageIndex, pageSize);
-            return result;
+            Query query = _unitOfWork.Product.GetTableQuery().Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            List<Product> productList = await _unitOfWork.Product.Filter(query);
+            return productList;
         }
 
         public async Task<Product?> GetById(int id)
         {
-            Product? product = await _unitOfWork.Product.GetById(id);
+            Product? product = await _unitOfWork.Product.FindById(id);
             return product;
         }
 

@@ -1,18 +1,18 @@
 ﻿using Entities;
-using Utilities;
+using Entities.ViewModel;
 
 namespace WebApi.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<PaginatedList<Category>> GetAll(int pageIndex, int pageSize);
+        Task<List<Category>> GetAll(int pageIndex, int pageSize);
 
         Task<Category?> GetById(int id);
 
-        Task<int> Add(Category category);
+        Task<int> Add(CategoryRq.InsertDto categoryRq);
 
         Task<int> Delete(int id);
 
-        Task<int> Update(Category category);
+        Task<int> Update(CategoryRq.UpdateDto categoryRq);
     }
 }

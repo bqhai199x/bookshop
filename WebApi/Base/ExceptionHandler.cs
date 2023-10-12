@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Serilog;
 using System.Net;
 
 namespace WebApi.Base
@@ -21,6 +22,7 @@ namespace WebApi.Base
             }
             catch (Exception ex) 
             {
+                Log.Error(ex.Message + Environment.NewLine + ex.StackTrace);
                 HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
                 switch (ex)

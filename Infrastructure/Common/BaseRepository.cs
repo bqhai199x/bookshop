@@ -19,6 +19,7 @@ namespace Infrastructure.Common
         protected IDbTransaction? DbTrans => _dbFactory.Transaction;
 
         private QueryFactory? _queryFactory;
+
         protected QueryFactory DbQuery => _queryFactory ??= new QueryFactory(DbConn, new MySqlCompiler());
     }
 }

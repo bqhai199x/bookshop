@@ -10,6 +10,9 @@ namespace Infrastructure.Common
         {
         }
 
+        private IAccountRepository? _account;
+        public IAccountRepository Account => _account ??= new AccountRepository(DbFactory);
+
         private ICategoryRepository? _category;
         public ICategoryRepository Category => _category ??= new CategoryRepository(DbFactory);
 
