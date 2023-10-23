@@ -13,6 +13,7 @@ namespace WebApi.Base
             services.AddAutoMapper(typeof(Program));
             services.AddJWTAuthorization();
             services.AddAuthorizationSwagger();
+            services.AddSignalR();
 
             services.AddScoped<IDbFactory, DbFactory>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();

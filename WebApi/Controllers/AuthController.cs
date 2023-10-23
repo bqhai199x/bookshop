@@ -2,9 +2,11 @@
 using Entities.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using Utilities;
 using WebApi.Auth;
+using WebApi.Base;
 using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers
@@ -21,7 +23,6 @@ namespace WebApi.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(LoginRq loginRq)
         {
@@ -44,8 +45,9 @@ namespace WebApi.Controllers
             return Unauthorized();
         }
 
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetMe()
+        public async Task<IActionResult> GetMe([FromServices] IHubContext<HubClient, IHubClient> hub)
         {
             var token = Request.Cookies["Access-Token"];
             if (token.IsNotBlank())
@@ -62,7 +64,6 @@ namespace WebApi.Controllers
             return Unauthorized();
         }
 
-        [AllowAnonymous]
         [HttpDelete]
         public IActionResult Logout()
         {

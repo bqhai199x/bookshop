@@ -14,7 +14,6 @@ namespace WebApi.Controllers
             _productService = productService;
         }
 
-        [AllowAnonymous]
         [HttpGet("count")]
         public async Task<IActionResult> Count()
         {
@@ -22,7 +21,6 @@ namespace WebApi.Controllers
             return Ok(count);
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(int pageIndex, int pageSize)
         {
@@ -37,6 +35,7 @@ namespace WebApi.Controllers
             return Ok(product);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Add(Product product)
         {
@@ -44,6 +43,7 @@ namespace WebApi.Controllers
             return Ok(categoryId);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -51,6 +51,7 @@ namespace WebApi.Controllers
             return Ok(result > 0);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> Update(Product product)
         {

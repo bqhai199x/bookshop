@@ -22,7 +22,6 @@ namespace WebApi.Controllers
             return Ok(category);
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(int pageIndex, int pageSize)
         {
@@ -30,6 +29,7 @@ namespace WebApi.Controllers
             return Ok(categoryList);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Add(CategoryRq.InsertDto category)
         {
@@ -37,6 +37,7 @@ namespace WebApi.Controllers
             return Ok(categoryId);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -44,6 +45,7 @@ namespace WebApi.Controllers
             return Ok(result > 0);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> Update(CategoryRq.UpdateDto category)
         {

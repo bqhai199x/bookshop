@@ -1,6 +1,4 @@
-using WebApi.Auth;
 using WebApi.Base;
-
 namespace WebApi
 {
     public static class Program
@@ -23,17 +21,18 @@ namespace WebApi
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+            //if (app.Environment.IsDevelopment())
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseCors(builder => builder
                          .AllowAnyMethod()
                          .AllowAnyHeader()
+                         .AllowCredentials()
                          .SetIsOriginAllowed(_ => true));
 
             app.UseAuthorization();
@@ -41,6 +40,7 @@ namespace WebApi
             app.UseMiddleware<HttpLogging>();
 
             app.MapControllers();
+            app.MapHub<HubClient>("/notify");
 
             app.Run();
         }
